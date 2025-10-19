@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh repo view circadian-red)",
+      "Bash(gh repo create circadian-red --public --description \"Circadian Red - AI-powered sleep tracking and optimization\" --source=. --remote=origin)",
+      "Bash(git init)",
+      "Bash(git add .)",
+      "Bash(git commit -m \"Initial commit - Circadian Red project\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
