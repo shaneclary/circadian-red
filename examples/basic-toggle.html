@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CircadianRed - Basic Example</title>
+
+  <!-- CircadianRed CSS -->
+  <link rel="stylesheet" href="../src/circadian-red.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      color: #1a1a1a;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+      margin-bottom: 40px;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.3em;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 1.2em;
+      color: #666;
+      margin-bottom: 1em;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background: #0056b3;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.secondary {
+      background: #6c757d;
+    }
+
+    button.secondary:hover {
+      background: #545b62;
+    }
+
+    .mode-selector {
+      display: flex;
+      gap: 4px;
+      background: #e0e0e0;
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .mode-selector button {
+      background: transparent;
+      color: #333;
+      padding: 10px 20px;
+    }
+
+    .mode-selector button[data-active="true"] {
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    select {
+      padding: 10px 16px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+    }
+
+    .status {
+      padding: 20px;
+      background: #e7f3ff;
+      border-left: 4px solid #007bff;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+
+    .status h3 {
+      margin-bottom: 10px;
+      color: #0056b3;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .status-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .status-value {
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    .content {
+      margin-top: 40px;
+    }
+
+    .content h2 {
+      margin-top: 30px;
+      margin-bottom: 15px;
+      font-size: 1.8em;
+    }
+
+    .content h3 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 1.3em;
+    }
+
+    .content p {
+      margin-bottom: 15px;
+    }
+
+    .demo-section {
+      padding: 20px;
+      margin: 20px 0;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .warning strong {
+      color: #856404;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CircadianRed Demo</h1>
+    <p class="subtitle">True circadian-safe red light mode for websites</p>
+  </header>
+
+  <section class="controls">
+    <div class="mode-selector">
+      <button data-mode="light" onclick="setDisplayMode('light')" data-active="true">
+        ☀️ Light
+      </button>
+      <button data-mode="dark" onclick="setDisplayMode('dark')">
+        🌑 Dark
+      </button>
+      <button data-mode="circadian" onclick="setDisplayMode('circadian')">
+        🌙 Night Safe
+      </button>
+    </div>
+
+    <label>
+      Intensity:
+      <select id="intensity-select" onchange="setIntensity(this.value)">
+        <option value="low">Low (0.5 lux)</option>
+        <option value="medium" selected>Medium (1.5 lux)</option>
+        <option value="high">High (3 lux)</option>
+      </select>
+    </label>
+
+    <button class="secondary" onclick="validateContrast()">
+      Validate Contrast
+    </button>
+
+    <button class="secondary" onclick="showGuidance()">
+      Measurement Guide
+    </button>
+  </section>
+
+  <section class="status">
+    <h3>Current Status</h3>
+    <div class="status-grid">
+      <div class="status-item">
+        <span class="status-label">Mode</span>
+        <span class="status-value" id="status-mode">Light</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Enabled</span>
+        <span class="status-value" id="status-enabled">No</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Intensity</span>
+        <span class="status-value" id="status-intensity">Medium</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Auto Schedule</span>
+        <span class="status-value" id="status-schedule">Inactive</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <h2>About CircadianRed</h2>
+
+    <p>
+      CircadianRed provides <strong>scientifically-validated red-spectrum display mode</strong>
+      that eliminates the 446-477nm blue wavelengths that maximally suppress melatonin
+      and disrupt circadian rhythm.
+    </p>
+
+    <div class="warning">
+      <strong>Note:</strong> This demo uses pure RGB(255,0,0) in Night Safe mode.
+      Text visibility is optimized within the 5.25:1 maximum contrast constraint.
+    </div>
+
+    <h3>Key Features</h3>
+
+    <div class="demo-section">
+      <h4>1. Pure Red Spectrum</h4>
+      <p>
+        Eliminates all green (G=0) and blue (B=0) channels, using only red wavelengths
+        above 620nm that don't activate melanopsin photoreceptors.
+      </p>
+    </div>
+
+    <div class="demo-section">
+      <h4>2. Intensity Control</h4>
+      <p>
+        Three intensity levels designed to keep display output below 3 lux for
+        maximum circadian safety. Use the dropdown above to adjust.
+      </p>
+    </div>
+
+    <div class="demo-section">
+      <h4>3. Contrast Optimization</h4>
+      <p>
+        Within the mathematical constraint of 5.25:1 maximum contrast, we optimize
+        text hierarchy through size, weight, and spacing rather than color variation.
+      </p>
+    </div>
+
+    <h3>The Science</h3>
+
+    <p>
+      Based on peer-reviewed research showing:
+    </p>
+
+    <ul>
+      <li><strong>Melanopsin peak sensitivity</strong> at 479nm</li>
+      <li><strong>446-477nm wavelengths</strong> suppress melatonin most efficiently</li>
+      <li><strong>Red light (>620nm)</strong> shows <10% melanopsin activation</li>
+      <li><strong>Pollack's structured water</strong> research: 450-500nm destroys EZ water</li>
+    </ul>
+
+    <h3>How to Use</h3>
+
+    <p>
+      <strong>For Evening Use (2-3 hours before bed):</strong>
+    </p>
+
+    <ol>
+      <li>Click "Night Safe" mode above</li>
+      <li>Adjust intensity to comfortable level</li>
+      <li>Use for reading, messaging, light browsing</li>
+      <li>Limit sessions to 30 minutes to prevent eye strain</li>
+      <li>Follow 20-20-20 rule: every 20 minutes, look 20 feet away for 20 seconds</li>
+    </ol>
+
+    <div class="warning">
+      <strong>Not Recommended For:</strong> Color-critical work (photo editing, design),
+      complex data visualization, extended sessions >30 minutes, or tasks requiring
+      >7:1 contrast (WCAG AAA).
+    </div>
+
+    <h3>Testing Your Display</h3>
+
+    <p>
+      To verify your display is truly circadian-safe:
+    </p>
+
+    <ol>
+      <li>Use a light meter or lux meter app</li>
+      <li>Enable Night Safe mode at High intensity</li>
+      <li>Measure light at eye position facing display</li>
+      <li>Should read <3 lux for maximum safety</li>
+      <li>If higher, reduce monitor backlight or increase viewing distance</li>
+    </ol>
+
+    <h2>Sample Content</h2>
+
+    <p>
+      This is regular paragraph text to demonstrate readability. Notice how the
+      contrast is optimized within red-spectrum constraints. The text should remain
+      clearly legible even in Night Safe mode.
+    </p>
+
+    <h3>Subheading Example</h3>
+
+    <p>
+      Hierarchy is maintained through font size and weight variation rather than
+      color coding. This compensates for the monochromatic limitation.
+    </p>
+
+    <p>
+      <strong>Bold text</strong> and <em>italic text</em> work as expected.
+      <a href="#">Links are styled</a> for visibility.
+    </p>
+
+  </section>
+
+  <!-- CircadianRed JS -->
+  <script src="../src/circadian-red.js"></script>
+
+  <script>
+    // Initialize CircadianRed
+    const cr = new CircadianRed({
+      mode: 'safe',
+      intensity: 'medium',
+      autoEnable: false
+    });
+
+    let currentDisplayMode = 'light';
+
+    // Set display mode
+    function setDisplayMode(mode) {
+      // Update button states
+      document.querySelectorAll('[data-mode]').forEach(btn => {
+        btn.setAttribute('data-active', btn.dataset.mode === mode);
+      });
+
+      currentDisplayMode = mode;
+
+      if (mode === 'circadian') {
+        cr.enable('safe');
+      } else if (mode === 'dark') {
+        cr.disable();
+        document.body.style.background = '#1a1a1a';
+        document.body.style.color = '#e0e0e0';
+      } else {
+        cr.disable();
+        document.body.style.background = '#ffffff';
+        document.body.style.color = '#1a1a1a';
+      }
+
+      updateStatus();
+    }
+
+    // Set intensity
+    function setIntensity(level) {
+      cr.setIntensity(level);
+      updateStatus();
+    }
+
+    // Update status display
+    function updateStatus() {
+      const status = cr.getStatus();
+
+      document.getElementById('status-mode').textContent =
+        currentDisplayMode.charAt(0).toUpperCase() + currentDisplayMode.slice(1);
+
+      document.getElementById('status-enabled').textContent =
+        status.enabled ? 'Yes' : 'No';
+
+      document.getElementById('status-intensity').textContent =
+        status.intensity.charAt(0).toUpperCase() + status.intensity.slice(1);
+
+      document.getElementById('status-schedule').textContent =
+        status.schedule.active ? 'Active' : 'Inactive';
+    }
+
+    // Validate contrast
+    function validateContrast() {
+      const warnings = cr.validateContrast();
+
+      if (warnings.length === 0) {
+        alert('✅ All elements pass WCAG AA contrast requirements!');
+      } else {
+        console.warn('Contrast warnings:', warnings);
+        alert(`⚠️ Found ${warnings.length} elements with insufficient contrast.\nCheck console for details.`);
+      }
+    }
+
+    // Show measurement guidance
+    function showGuidance() {
+      cr.measureIntensity();
+      alert('📏 Measurement guidance printed to console.\n\nPress F12 to open developer tools and view the guide.');
+    }
+
+    // Event listeners
+    cr.on('enable', (data) => {
+      console.log('CircadianRed enabled:', data);
+      updateStatus();
+    });
+
+    cr.on('disable', () => {
+      console.log('CircadianRed disabled');
+      updateStatus();
+    });
+
+    cr.on('intensityChange', (data) => {
+      console.log('Intensity changed:', data);
+      updateStatus();
+    });
+
+    // Initial status
+    updateStatus();
+  </script>
+
+</body>
+</html>
