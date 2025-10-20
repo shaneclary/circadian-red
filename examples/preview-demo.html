@@ -277,18 +277,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
       transition: all 0.3s ease;
-      filter: hue-rotate(200deg) saturate(2);
+      color: #0066cc;
+    }
+
+    .circadian-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
     }
 
     body.dark-mode .circadian-icon {
-      filter: hue-rotate(200deg) saturate(1.5) brightness(1.2);
+      color: #4d9fff;
     }
 
     body.circadian-active .mode-btn.active .circadian-icon {
       animation: pulse-icon 2s infinite;
-      filter: none !important;
+      color: rgb(255, 0, 0) !important;
     }
 
     @keyframes pulse-icon {
@@ -728,7 +733,12 @@
             <span>🌑</span>
           </button>
           <button class="mode-btn icon-only" id="circadianBtn" onclick="cycleCircadian()">
-            <span class="circadian-icon">👁️</span>
+            <span class="circadian-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3" fill="none"></circle>
+              </svg>
+            </span>
             <span class="intensity-label"></span>
           </button>
         </div>
