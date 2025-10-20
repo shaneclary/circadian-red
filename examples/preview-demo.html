@@ -277,10 +277,16 @@
       justify-content: center;
       font-size: 22px;
       transition: all 0.3s ease;
+      filter: hue-rotate(200deg) saturate(2);
+    }
+
+    body.dark-mode .circadian-icon {
+      filter: hue-rotate(200deg) saturate(1.5) brightness(1.2);
     }
 
     body.circadian-active .mode-btn.active .circadian-icon {
       animation: pulse-icon 2s infinite;
+      filter: none !important;
     }
 
     @keyframes pulse-icon {
