@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CircadianRed Preview - See It In Action</title>
+
+  <!-- CircadianRed CSS -->
+  <link rel="stylesheet" href="../src/circadian-red.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      color: #1a1a1a;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Fixed header with controls */
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #e0e0e0;
+      padding: 15px 20px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .controls-wrapper {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .mode-selector {
+      display: flex;
+      gap: 3px;
+      background: #e0e0e0;
+      padding: 3px;
+      border-radius: 8px;
+    }
+
+    .mode-selector button {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .mode-selector button[data-active="true"] {
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .intensity-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .intensity-control select {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* Main content */
+    .content {
+      max-width: 900px;
+      margin: 100px auto 40px;
+      padding: 0 20px;
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 16px;
+      margin-bottom: 40px;
+    }
+
+    .hero-section h1 {
+      font-size: 3em;
+      margin-bottom: 0.3em;
+      font-weight: 800;
+    }
+
+    .hero-section p {
+      font-size: 1.3em;
+      opacity: 0.95;
+    }
+
+    section {
+      margin: 50px 0;
+    }
+
+    h2 {
+      font-size: 2.2em;
+      margin-bottom: 0.5em;
+      color: #1a1a1a;
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: 1.6em;
+      margin: 30px 0 15px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    h4 {
+      font-size: 1.2em;
+      margin: 20px 0 10px;
+      color: #444;
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 1em;
+      font-size: 1.05em;
+    }
+
+    .card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 20px 0;
+      border-left: 4px solid #667eea;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #667eea;
+    }
+
+    .info-box {
+      background: #e7f3ff;
+      border-left: 4px solid #007bff;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .success-box {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .feature-item {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s;
+    }
+
+    .feature-item:hover {
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    ul, ol {
+      margin: 20px 0 20px 30px;
+    }
+
+    li {
+      margin: 10px 0;
+      line-height: 1.7;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+      color: #c7254e;
+    }
+
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 20px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .demo-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .demo-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+    }
+
+    .color-palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .color-swatch {
+      height: 100px;
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-end;
+      padding: 15px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-size: 0.9em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+    }
+
+    tr:hover {
+      background: #f8f9fa;
+    }
+
+    blockquote {
+      border-left: 4px solid #667eea;
+      padding: 15px 20px;
+      margin: 20px 0;
+      background: #f8f9fa;
+      font-style: italic;
+      color: #555;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0056b3;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #545b62;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #333;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .form-group {
+      margin: 20px 0;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    footer {
+      background: #1a1a1a;
+      color: white;
+      padding: 40px 20px;
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2em;
+      }
+
+      .header-content {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .controls-wrapper {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed Header with Controls -->
+  <div class="fixed-header">
+    <div class="header-content">
+      <div class="logo">🌙 CircadianRed Preview</div>
+
+      <div class="controls-wrapper">
+        <div class="mode-selector circadian-mode-selector">
+          <button data-mode="light" onclick="setMode('light')" data-active="true">
+            ☀️ Light
+          </button>
+          <button data-mode="dark" onclick="setMode('dark')">
+            🌑 Dark
+          </button>
+          <button data-mode="circadian" onclick="setMode('circadian')">
+            🌙 CircadianRed
+          </button>
+        </div>
+
+        <div class="intensity-control">
+          <label for="intensity">Intensity:</label>
+          <select id="intensity" onchange="setIntensity(this.value)">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+
+    <!-- Hero -->
+    <div class="hero-section">
+      <h1>CircadianRed Preview</h1>
+      <p>Experience true circadian-safe red light mode in action</p>
+    </div>
+
+    <!-- Introduction -->
+    <section>
+      <h2>Welcome to the CircadianRed Demo</h2>
+      <p>
+        This page demonstrates how <strong>CircadianRed</strong> transforms your display
+        using pure red spectrum (RGB 255,0,0) to eliminate the 446-477nm blue wavelengths
+        that suppress melatonin and disrupt circadian rhythm.
+      </p>
+
+      <div class="info-box">
+        <strong>👆 Try it now:</strong> Click the "CircadianRed" button in the header above
+        to see this entire page transform to circadian-safe red mode. Notice how all colors,
+        images, and text adapt while maintaining readability.
+      </div>
+    </section>
+
+    <!-- What You'll Notice -->
+    <section>
+      <h2>What You'll Notice</h2>
+
+      <div class="feature-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🎨</div>
+          <h4>Pure Red Spectrum</h4>
+          <p>All colors convert to shades of red with zero green or blue channels.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">📖</div>
+          <h4>Optimized Contrast</h4>
+          <p>Text remains readable within the 5.25:1 maximum contrast constraint.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">🖼️</div>
+          <h4>Image Filtering</h4>
+          <p>Photos and graphics automatically filter to red-only display.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <h4>Instant Toggle</h4>
+          <p>Switch modes seamlessly without page reload or flicker.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Typography Examples -->
+    <section>
+      <h2>Typography Hierarchy</h2>
+      <p>
+        Notice how CircadianRed maintains visual hierarchy through size and weight
+        rather than color variation:
+      </p>
+
+      <div class="card">
+        <h3>This is a Heading 3 (Most Important)</h3>
+        <p>
+          This is body text at normal weight. It's designed to be readable even
+          in pure red mode by maximizing the contrast between text and background.
+        </p>
+
+        <h4>This is a Heading 4 (Secondary)</h4>
+        <p>
+          <strong>Bold text</strong> adds emphasis, while <em>italic text</em>
+          provides subtle variation. <a href="#">Links are clearly styled</a>
+          for visibility.
+        </p>
+      </div>
+    </section>
+
+    <!-- Lists -->
+    <section>
+      <h3>Lists and Structured Content</h3>
+
+      <h4>Unordered List</h4>
+      <ul>
+        <li>Pure RGB(255,0,0) spectrum with zero blue/green channels</li>
+        <li>Three intensity levels: Low (0.5 lux), Medium (1.5 lux), High (3 lux)</li>
+        <li>Auto-scheduling support for time-based activation</li>
+        <li>WCAG AA contrast compliance where mathematically possible</li>
+        <li>Framework-agnostic - works with any JavaScript framework</li>
+      </ul>
+
+      <h4>Ordered List (Step-by-Step)</h4>
+      <ol>
+        <li>Click the "CircadianRed" button in the header</li>
+        <li>Observe how all content transforms to red spectrum</li>
+        <li>Adjust intensity using the dropdown (Low/Medium/High)</li>
+        <li>Try reading different sections to test readability</li>
+        <li>Switch back to Light or Dark mode for comparison</li>
+      </ol>
+    </section>
+
+    <!-- Color Palette Demonstration -->
+    <section>
+      <h2>Color Palette in Action</h2>
+      <p>
+        Standard colors transform to red-spectrum equivalents. Watch these swatches
+        when you enable CircadianRed:
+      </p>
+
+      <div class="color-palette">
+        <div class="color-swatch" style="background: #007bff;">Primary Blue</div>
+        <div class="color-swatch" style="background: #28a745;">Success Green</div>
+        <div class="color-swatch" style="background: #ffc107; color: #333;">Warning Yellow</div>
+        <div class="color-swatch" style="background: #dc3545;">Danger Red</div>
+        <div class="color-swatch" style="background: #6c757d;">Secondary Gray</div>
+        <div class="color-swatch" style="background: #17a2b8;">Info Cyan</div>
+      </div>
+    </section>
+
+    <!-- UI Components -->
+    <section>
+      <h2>UI Components</h2>
+
+      <h3>Buttons</h3>
+      <div class="button-group">
+        <button class="btn btn-primary">Primary Action</button>
+        <button class="btn btn-secondary">Secondary Action</button>
+        <button class="btn btn-success">Success</button>
+        <button class="btn btn-warning">Warning</button>
+        <button class="btn btn-danger">Danger</button>
+      </div>
+
+      <h3>Form Elements</h3>
+      <div class="form-group">
+        <label for="demo-input">Text Input</label>
+        <input type="text" id="demo-input" placeholder="Type something here...">
+      </div>
+
+      <div class="form-group">
+        <label for="demo-textarea">Textarea</label>
+        <textarea id="demo-textarea" rows="4" placeholder="Longer text content..."></textarea>
+      </div>
+    </section>
+
+    <!-- Information Boxes -->
+    <section>
+      <h2>Information Boxes</h2>
+
+      <div class="info-box">
+        <strong>ℹ️ Info:</strong> This is an informational message. Notice how the
+        blue background converts to red spectrum while maintaining readability.
+      </div>
+
+      <div class="success-box">
+        <strong>✅ Success:</strong> Green success messages transform to red spectrum
+        while preserving the visual hierarchy and meaning through contrast.
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ Warning:</strong> Yellow warnings maintain visibility in red mode
+        through carefully calibrated brightness levels.
+      </div>
+    </section>
+
+    <!-- Table Example -->
+    <section>
+      <h2>Data Tables</h2>
+      <p>Tables maintain structure and readability:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Standard Mode</th>
+            <th>CircadianRed Mode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Blue Light (446-477nm)</td>
+            <td>Present</td>
+            <td><strong>Eliminated ✓</strong></td>
+          </tr>
+          <tr>
+            <td>Green Light (495-570nm)</td>
+            <td>Present</td>
+            <td><strong>Eliminated ✓</strong></td>
+          </tr>
+          <tr>
+            <td>Red Light (620-750nm)</td>
+            <td>Present</td>
+            <td><strong>Pure Red ✓</strong></td>
+          </tr>
+          <tr>
+            <td>Maximum Contrast</td>
+            <td>21:1</td>
+            <td>5.25:1</td>
+          </tr>
+          <tr>
+            <td>Target Intensity</td>
+            <td>~300 lux</td>
+            <td>&lt;3 lux</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Image Demonstration -->
+    <section>
+      <h2>Image Filtering</h2>
+      <p>
+        Images automatically convert to red spectrum. Here are some placeholder
+        images (in CircadianRed mode, they'll filter to red-only):
+      </p>
+
+      <div class="demo-images">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 200px; border-radius: 8px;"></div>
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); height: 200px; border-radius: 8px;"></div>
+        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); height: 200px; border-radius: 8px;"></div>
+        <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); height: 200px; border-radius: 8px;"></div>
+      </div>
+    </section>
+
+    <!-- Blockquote -->
+    <section>
+      <h2>Quotes and Citations</h2>
+      <blockquote>
+        "The human circadian system operates through intrinsically photosensitive
+        retinal ganglion cells containing melanopsin, with peak sensitivity at 479nm.
+        Red wavelengths above 620nm exploit this spectral curve, showing less than
+        10% of peak sensitivity."
+        <br><br>
+        — Based on Brainard et al. (2001) melanopsin sensitivity research
+      </blockquote>
+    </section>
+
+    <!-- Code Example -->
+    <section>
+      <h2>Code Blocks</h2>
+      <p>Even code samples remain readable:</p>
+
+      <div class="code-block">const cr = new CircadianRed({
+  mode: 'safe',
+  intensity: 'medium',
+  autoEnable: true,
+  scheduleStart: '20:00',
+  scheduleEnd: '06:00'
+});
+
+// Enable CircadianRed mode
+cr.enable();
+
+// Listen for mode changes
+cr.on('enable', (data) => {
+  console.log('CircadianRed activated:', data.mode);
+});</div>
+    </section>
+
+    <!-- The Science -->
+    <section>
+      <h2>Why This Matters</h2>
+
+      <div class="card">
+        <h3>🧬 Melanopsin Biology</h3>
+        <p>
+          Your eyes contain melanopsin photoreceptors with peak sensitivity at 479nm.
+          Exposure to 446-477nm blue light suppresses melatonin with devastating
+          efficiency - requiring only 30 lux for measurable disruption.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>💧 Structured Water</h3>
+        <p>
+          Gerald Pollack's research shows 450-500nm blue light actively destroys
+          cellular structured water (EZ water), while red and infrared wavelengths
+          enhance it. The same wavelengths disrupting sleep also damage cellular health.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🔴 Red Light Safety</h3>
+        <p>
+          Wavelengths above 620nm show &lt;10% melanopsin activation. Studies show
+          631nm red allows melatonin recovery after 2 hours, while blue maintains
+          suppression. CircadianRed targets &lt;3 lux intensity for maximum safety.
+        </p>
+      </div>
+    </section>
+
+    <!-- Usage Tips -->
+    <section>
+      <h2>How to Use This Demo</h2>
+
+      <div class="success-box">
+        <h4>✅ Recommended Usage:</h4>
+        <ul>
+          <li>Enable CircadianRed mode 2-3 hours before bedtime</li>
+          <li>Start with Medium intensity, adjust based on comfort</li>
+          <li>Use for reading, messaging, light browsing</li>
+          <li>Limit sessions to 30 minutes to prevent eye strain</li>
+          <li>Compare Light vs. CircadianRed to see the difference</li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <h4>⚠️ Not Recommended For:</h4>
+        <ul>
+          <li>Color-critical work (photo editing, design)</li>
+          <li>Complex data visualization requiring color coding</li>
+          <li>Extended sessions longer than 30 minutes</li>
+          <li>Tasks requiring greater than 7:1 contrast (WCAG AAA)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section style="text-align: center; padding: 40px 20px; background: #f8f9fa; border-radius: 12px;">
+      <h2>Ready to Add CircadianRed to Your Site?</h2>
+      <p style="font-size: 1.2em; margin: 20px 0;">
+        It takes less than 5 minutes to integrate
+      </p>
+      <div class="button-group" style="justify-content: center;">
+        <a href="https://github.com/shaneclary/circadian-red" class="btn btn-primary">
+          View on GitHub
+        </a>
+        <a href="../docs/implementation-guide.md" class="btn btn-secondary">
+          Read Documentation
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p><strong>CircadianRed</strong> - True circadian-safe red light mode</p>
+    <p style="margin-top: 10px;">
+      <a href="https://github.com/shaneclary/circadian-red">GitHub</a> •
+      <a href="../SCIENCE.md">Science</a> •
+      <a href="../docs/implementation-guide.md">Documentation</a>
+    </p>
+    <p style="margin-top: 20px; opacity: 0.7; font-size: 0.9em;">
+      Based on peer-reviewed melanopsin research and Pollack's structured water studies
+    </p>
+  </footer>
+
+  <!-- CircadianRed JS -->
+  <script src="../src/circadian-red.js"></script>
+
+  <script>
+    // Initialize CircadianRed
+    const cr = new CircadianRed({
+      mode: 'safe',
+      intensity: 'medium',
+      autoEnable: false
+    });
+
+    let currentMode = 'light';
+
+    function setMode(mode) {
+      // Update button states
+      document.querySelectorAll('[data-mode]').forEach(btn => {
+        btn.setAttribute('data-active', btn.dataset.mode === mode);
+      });
+
+      currentMode = mode;
+
+      if (mode === 'circadian') {
+        cr.enable('safe');
+      } else if (mode === 'dark') {
+        cr.disable();
+        document.body.style.background = '#1a1a1a';
+        document.body.style.color = '#e0e0e0';
+      } else {
+        cr.disable();
+        document.body.style.background = '#ffffff';
+        document.body.style.color = '#1a1a1a';
+      }
+
+      localStorage.setItem('preview-mode', mode);
+    }
+
+    function setIntensity(level) {
+      cr.setIntensity(level);
+    }
+
+    // Restore saved mode
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('preview-mode');
+      if (saved && saved !== 'light') {
+        setMode(saved);
+      }
+    });
+
+    // Event tracking
+    cr.on('enable', (data) => {
+      console.log('✅ CircadianRed enabled:', data.mode);
+      console.log('👁️ All blue/green wavelengths eliminated');
+      console.log('📊 Maximum contrast: 5.25:1');
+      console.log('💡 Target intensity: <3 lux');
+    });
+
+    cr.on('disable', () => {
+      console.log('CircadianRed disabled');
+    });
+
+    cr.on('intensityChange', (data) => {
+      console.log('Intensity changed to:', data.level);
+    });
+
+    // Welcome message
+    console.log('%c🌙 CircadianRed Preview Demo', 'font-size: 20px; font-weight: bold; color: #667eea;');
+    console.log('%cClick "CircadianRed" in the header to see pure red-spectrum mode in action!', 'font-size: 14px; color: #666;');
+    console.log('%cBased on melanopsin sensitivity research (479nm peak)', 'font-size: 12px; color: #999;');
+  </script>
+
+</body>
+</html>

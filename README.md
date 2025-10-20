@@ -7,7 +7,7 @@ Protect your users' sleep and cellular health with scientifically-validated red-
 [![npm version](https://img.shields.io/npm/v/circadian-red.svg)](https://www.npmjs.com/package/circadian-red)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[🌙 Live Demo](https://shaneclary.github.io/circadian-red) | [📚 Documentation](./docs/implementation-guide.md) | [🔬 The Science](./SCIENCE.md)
+[🌙 Live Demo](https://shaneclary.github.io/circadian-red) | [👁️ Preview](./examples/preview-demo.html) | [📚 Documentation](./docs/implementation-guide.md) | [🔬 The Science](./SCIENCE.md)
 
 ## The Problem
 
