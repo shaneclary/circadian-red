@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CircadianRed Preview - See It In Action</title>
 
-  <!-- CircadianRed CSS -->
-  <link rel="stylesheet" href="../src/circadian-red.css">
-
   <style>
     * {
       margin: 0;
@@ -15,12 +12,142 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --transition-speed: 0.3s;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
       line-height: 1.6;
       background: #ffffff;
-      color: #1a1a1a;
-      transition: background-color 0.3s, color 0.3s;
+      color: #1d1d1f;
+      transition: background var(--transition-speed), color var(--transition-speed);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* DARK MODE */
+    body.dark-mode {
+      background: #000000;
+      color: #f5f5f7;
+    }
+
+    body.dark-mode .fixed-header {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.dark-mode .card,
+    body.dark-mode .demo-box,
+    body.dark-mode .feature-item {
+      background: #2c2c2e;
+      border-color: #3a3a3c;
+    }
+
+    body.dark-mode h1,
+    body.dark-mode h2,
+    body.dark-mode h3,
+    body.dark-mode h4 {
+      color: #f5f5f7;
+    }
+
+    body.dark-mode .info-box {
+      background: rgba(10, 132, 255, 0.15);
+      border-left-color: #0A84FF;
+    }
+
+    body.dark-mode .success-box {
+      background: rgba(52, 199, 89, 0.15);
+      border-left-color: #34C759;
+    }
+
+    body.dark-mode .warning-box {
+      background: rgba(255, 159, 10, 0.15);
+      border-left-color: #FF9F0A;
+    }
+
+    body.dark-mode th {
+      background: #2c2c2e;
+    }
+
+    body.dark-mode tr:hover {
+      background: #3a3a3c;
+    }
+
+    body.dark-mode code {
+      background: #2c2c2e;
+      color: #FF9F0A;
+    }
+
+    body.dark-mode .code-block {
+      background: #1d1d1f;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* CIRCADIAN RED OVERLAY - Using your better palette! */
+    body.circadian-active * {
+      color: rgb(255, 0, 0) !important;
+      border-color: rgb(100, 0, 0) !important;
+    }
+
+    body.circadian-active {
+      background: rgb(0, 0, 0) !important;
+    }
+
+    body.circadian-active .fixed-header {
+      background: rgba(0, 0, 0, 0.95) !important;
+      border-bottom-color: rgb(80, 0, 0) !important;
+    }
+
+    body.circadian-active .demo-box,
+    body.circadian-active .card,
+    body.circadian-active .feature-item,
+    body.circadian-active .info-box,
+    body.circadian-active .success-box,
+    body.circadian-active .warning-box,
+    body.circadian-active .code-block,
+    body.circadian-active table {
+      background: rgb(15, 0, 0) !important;
+      border-color: rgb(80, 0, 0) !important;
+    }
+
+    body.circadian-active h1,
+    body.circadian-active h2,
+    body.circadian-active h3,
+    body.circadian-active h4 {
+      color: rgb(255, 0, 0) !important;
+      font-weight: 600;
+    }
+
+    body.circadian-active .subtitle,
+    body.circadian-active .secondary,
+    body.circadian-active p,
+    body.circadian-active li {
+      color: rgb(200, 0, 0) !important;
+    }
+
+    body.circadian-active th {
+      background: rgb(20, 0, 0) !important;
+    }
+
+    body.circadian-active tr:hover {
+      background: rgb(25, 0, 0) !important;
+    }
+
+    body.circadian-active code {
+      background: rgb(20, 0, 0) !important;
+      color: rgb(255, 100, 100) !important;
+    }
+
+    /* Intensity levels */
+    body.circadian-high { filter: brightness(1.0); }
+    body.circadian-medium { filter: brightness(0.65); }
+    body.circadian-low { filter: brightness(0.35); }
+
+    /* Images filter to red */
+    body.circadian-active img,
+    body.circadian-active .demo-gradient {
+      filter: saturate(0) brightness(0.7) sepia(100%) hue-rotate(-50deg) !important;
     }
 
     /* Fixed header with controls */
@@ -35,6 +162,7 @@
       padding: 15px 20px;
       z-index: 1000;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: all var(--transition-speed);
     }
 
     .header-content {
@@ -53,6 +181,14 @@
       color: #667eea;
     }
 
+    body.dark-mode .logo {
+      color: #8b9aff;
+    }
+
+    body.circadian-active .logo {
+      color: rgb(255, 0, 0) !important;
+    }
+
     .controls-wrapper {
       display: flex;
       gap: 15px;
@@ -60,45 +196,145 @@
       flex-wrap: wrap;
     }
 
-    .mode-selector {
-      display: flex;
-      gap: 3px;
-      background: #e0e0e0;
-      padding: 3px;
-      border-radius: 8px;
+    /* Mode Controls - Using your design */
+    .mode-controls {
+      display: inline-flex;
+      gap: 0;
+      padding: 4px;
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      transition: all var(--transition-speed);
     }
 
-    .mode-selector button {
-      padding: 8px 16px;
+    body.dark-mode .mode-controls {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    body.circadian-active .mode-controls {
+      background: rgba(255, 0, 0, 0.08) !important;
+    }
+
+    .mode-btn {
+      position: relative;
+      padding: 10px 20px;
       border: none;
       background: transparent;
-      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s;
-      font-size: 14px;
+      border-radius: 8px;
+      font-size: 0.9375rem;
       font-weight: 500;
-      color: #333;
-    }
-
-    .mode-selector button[data-active="true"] {
-      background: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .intensity-control {
+      color: #1d1d1f;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
+    }
+
+    body.dark-mode .mode-btn {
+      color: #f5f5f7;
+    }
+
+    body.circadian-active .mode-btn {
+      color: rgb(200, 0, 0) !important;
+    }
+
+    .mode-btn:hover:not(.active) {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    body.dark-mode .mode-btn:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .mode-btn.active {
+      background: #ffffff;
+      color: #1d1d1f;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    body.dark-mode .mode-btn.active {
+      background: #2c2c2e;
+      color: #f5f5f7;
+    }
+
+    body.circadian-active .mode-btn.active {
+      background: rgb(40, 0, 0) !important;
+      color: rgb(255, 0, 0) !important;
+      box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3) !important;
+    }
+
+    .mode-btn.icon-only {
+      padding: 10px;
+      min-width: 44px;
+      justify-content: center;
+    }
+
+    .circadian-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      transition: all 0.3s ease;
+    }
+
+    body.circadian-active .mode-btn.active .circadian-icon {
+      animation: pulse-icon 2s infinite;
+    }
+
+    @keyframes pulse-icon {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+      }
+    }
+
+    /* Intensity Control - Only shows when CircadianRed is active */
+    .intensity-control {
+      display: none;
+      align-items: center;
+      gap: 8px;
       font-size: 14px;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: 8px;
+      transition: all var(--transition-speed);
+    }
+
+    body.circadian-active .intensity-control {
+      display: flex !important;
+      background: rgba(255, 0, 0, 0.08) !important;
+    }
+
+    body.circadian-active .intensity-control label {
+      color: rgb(200, 0, 0) !important;
     }
 
     .intensity-control select {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
+      padding: 6px 10px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
       border-radius: 6px;
       background: white;
       cursor: pointer;
       font-size: 14px;
+      transition: all var(--transition-speed);
+    }
+
+    body.dark-mode .intensity-control select {
+      background: #2c2c2e;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f5f5f7;
+    }
+
+    body.circadian-active .intensity-control select {
+      background: rgb(30, 0, 0) !important;
+      border-color: rgb(100, 0, 0) !important;
+      color: rgb(255, 0, 0) !important;
     }
 
     /* Main content */
@@ -115,17 +351,20 @@
       color: white;
       border-radius: 16px;
       margin-bottom: 40px;
+      transition: all var(--transition-speed);
     }
 
     .hero-section h1 {
       font-size: 3em;
       margin-bottom: 0.3em;
       font-weight: 800;
+      color: white !important;
     }
 
     .hero-section p {
       font-size: 1.3em;
       opacity: 0.95;
+      color: white !important;
     }
 
     section {
@@ -137,6 +376,7 @@
       margin-bottom: 0.5em;
       color: #1a1a1a;
       font-weight: 700;
+      letter-spacing: -0.01em;
     }
 
     h3 {
@@ -158,17 +398,33 @@
       font-size: 1.05em;
     }
 
-    .card {
+    .card,
+    .demo-box,
+    .feature-item {
       background: #f8f9fa;
       border-radius: 12px;
       padding: 30px;
       margin: 20px 0;
-      border-left: 4px solid #667eea;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all var(--transition-speed);
     }
 
     .card h3 {
       margin-top: 0;
       color: #667eea;
+    }
+
+    body.dark-mode .card h3 {
+      color: #8b9aff;
+    }
+
+    body.circadian-active .card h3 {
+      color: rgb(255, 0, 0) !important;
+    }
+
+    .demo-box h2 {
+      font-size: 2em;
+      margin-bottom: 1em;
     }
 
     .info-box {
@@ -177,6 +433,7 @@
       padding: 20px;
       margin: 20px 0;
       border-radius: 4px;
+      transition: all var(--transition-speed);
     }
 
     .warning-box {
@@ -185,6 +442,7 @@
       padding: 20px;
       margin: 20px 0;
       border-radius: 4px;
+      transition: all var(--transition-speed);
     }
 
     .success-box {
@@ -193,6 +451,7 @@
       padding: 20px;
       margin: 20px 0;
       border-radius: 4px;
+      transition: all var(--transition-speed);
     }
 
     .feature-grid {
@@ -203,17 +462,16 @@
     }
 
     .feature-item {
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      border: 2px solid #e0e0e0;
       transition: all 0.3s;
     }
 
     .feature-item:hover {
-      border-color: #667eea;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+    body.circadian-active .feature-item:hover {
+      box-shadow: 0 4px 12px rgba(255, 0, 0, 0.15) !important;
     }
 
     .feature-icon {
@@ -234,9 +492,10 @@
       background: #f5f5f5;
       padding: 3px 8px;
       border-radius: 4px;
-      font-family: 'Courier New', monospace;
+      font-family: 'SF Mono', Monaco, 'Courier New', monospace;
       font-size: 0.95em;
       color: #c7254e;
+      transition: all var(--transition-speed);
     }
 
     .code-block {
@@ -246,9 +505,11 @@
       border-radius: 8px;
       overflow-x: auto;
       margin: 20px 0;
-      font-family: 'Courier New', monospace;
+      font-family: 'SF Mono', Monaco, 'Courier New', monospace;
       font-size: 0.95em;
       line-height: 1.5;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      transition: all var(--transition-speed);
     }
 
     .demo-images {
@@ -258,12 +519,10 @@
       margin: 30px 0;
     }
 
-    .demo-image {
-      width: 100%;
+    .demo-gradient {
       height: 200px;
-      object-fit: cover;
       border-radius: 8px;
-      border: 2px solid #e0e0e0;
+      transition: all var(--transition-speed);
     }
 
     .color-palette {
@@ -283,6 +542,7 @@
       font-weight: 600;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       font-size: 0.9em;
+      transition: all var(--transition-speed);
     }
 
     table {
@@ -290,6 +550,9 @@
       border-collapse: collapse;
       margin: 20px 0;
       background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all var(--transition-speed);
     }
 
     th, td {
@@ -315,6 +578,20 @@
       background: #f8f9fa;
       font-style: italic;
       color: #555;
+      border-radius: 4px;
+      transition: all var(--transition-speed);
+    }
+
+    body.dark-mode blockquote {
+      background: #2c2c2e;
+      border-left-color: #8b9aff;
+      color: #86868b;
+    }
+
+    body.circadian-active blockquote {
+      background: rgb(15, 0, 0) !important;
+      border-left-color: rgb(255, 0, 0) !important;
+      color: rgb(200, 0, 0) !important;
     }
 
     .button-group {
@@ -351,10 +628,6 @@
       color: white;
     }
 
-    .btn-secondary:hover {
-      background: #545b62;
-    }
-
     .btn-success {
       background: #28a745;
       color: white;
@@ -388,6 +661,21 @@
       border-radius: 6px;
       font-size: 16px;
       font-family: inherit;
+      transition: all var(--transition-speed);
+    }
+
+    body.dark-mode .form-group input,
+    body.dark-mode .form-group textarea {
+      background: #2c2c2e;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f5f5f7;
+    }
+
+    body.circadian-active .form-group input,
+    body.circadian-active .form-group textarea {
+      background: rgb(30, 0, 0) !important;
+      border-color: rgb(100, 0, 0) !important;
+      color: rgb(255, 0, 0) !important;
     }
 
     .form-group input:focus,
@@ -434,24 +722,25 @@
       <div class="logo">🌙 CircadianRed Preview</div>
 
       <div class="controls-wrapper">
-        <div class="mode-selector circadian-mode-selector">
-          <button data-mode="light" onclick="setMode('light')" data-active="true">
-            ☀️ Light
+        <div class="mode-controls">
+          <button class="mode-btn active" id="lightBtn" onclick="setMode('light')">
+            <span>☀️</span>
           </button>
-          <button data-mode="dark" onclick="setMode('dark')">
-            🌑 Dark
+          <button class="mode-btn" id="darkBtn" onclick="setMode('dark')">
+            <span>🌑</span>
           </button>
-          <button data-mode="circadian" onclick="setMode('circadian')">
-            🌙 CircadianRed
+          <button class="mode-btn icon-only" id="circadianBtn" onclick="cycleCircadian()">
+            <span class="circadian-icon">👁️</span>
           </button>
         </div>
 
-        <div class="intensity-control">
+        <!-- Intensity Control - Only visible when CircadianRed is active -->
+        <div class="intensity-control" id="intensityControl">
           <label for="intensity">Intensity:</label>
           <select id="intensity" onchange="setIntensity(this.value)">
             <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
-            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="high" selected>High</option>
           </select>
         </div>
       </div>
@@ -477,9 +766,9 @@
       </p>
 
       <div class="info-box">
-        <strong>👆 Try it now:</strong> Click the "CircadianRed" button in the header above
-        to see this entire page transform to circadian-safe red mode. Notice how all colors,
-        images, and text adapt while maintaining readability.
+        <strong>👆 Try it now:</strong> Click the eye icon (👁️) in the header to cycle through
+        intensity levels: High → Medium → Low → Off. Notice how all colors, images, and text
+        adapt while maintaining readability. The intensity selector appears when active!
       </div>
     </section>
 
@@ -508,8 +797,8 @@
 
         <div class="feature-item">
           <div class="feature-icon">⚡</div>
-          <h4>Instant Toggle</h4>
-          <p>Switch modes seamlessly without page reload or flicker.</p>
+          <h4>Cycling Intensity</h4>
+          <p>Click the eye repeatedly to cycle: High → Medium → Low → Off.</p>
         </div>
       </div>
     </section>
@@ -542,22 +831,23 @@
     <section>
       <h3>Lists and Structured Content</h3>
 
-      <h4>Unordered List</h4>
+      <h4>Key Features</h4>
       <ul>
         <li>Pure RGB(255,0,0) spectrum with zero blue/green channels</li>
         <li>Three intensity levels: Low (0.5 lux), Medium (1.5 lux), High (3 lux)</li>
-        <li>Auto-scheduling support for time-based activation</li>
+        <li>Cycling interaction - click repeatedly to adjust</li>
         <li>WCAG AA contrast compliance where mathematically possible</li>
         <li>Framework-agnostic - works with any JavaScript framework</li>
       </ul>
 
-      <h4>Ordered List (Step-by-Step)</h4>
+      <h4>How to Try It (Step-by-Step)</h4>
       <ol>
-        <li>Click the "CircadianRed" button in the header</li>
+        <li>Click the eye icon (👁️) in the header once - activates High intensity</li>
         <li>Observe how all content transforms to red spectrum</li>
-        <li>Adjust intensity using the dropdown (Low/Medium/High)</li>
-        <li>Try reading different sections to test readability</li>
-        <li>Switch back to Light or Dark mode for comparison</li>
+        <li>Click again for Medium intensity (dimmer)</li>
+        <li>Click again for Low intensity (dimmest)</li>
+        <li>Click once more to return to Off</li>
+        <li>Or use the intensity dropdown that appears when active</li>
       </ol>
     </section>
 
@@ -671,15 +961,15 @@
     <section>
       <h2>Image Filtering</h2>
       <p>
-        Images automatically convert to red spectrum. Here are some placeholder
-        images (in CircadianRed mode, they'll filter to red-only):
+        Gradients automatically convert to red spectrum. Here are some color gradients
+        (watch them transform in CircadianRed mode):
       </p>
 
       <div class="demo-images">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 200px; border-radius: 8px;"></div>
-        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); height: 200px; border-radius: 8px;"></div>
-        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); height: 200px; border-radius: 8px;"></div>
-        <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); height: 200px; border-radius: 8px;"></div>
+        <div class="demo-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+        <div class="demo-gradient" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+        <div class="demo-gradient" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+        <div class="demo-gradient" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
       </div>
     </section>
 
@@ -757,11 +1047,12 @@ cr.on('enable', (data) => {
       <div class="success-box">
         <h4>✅ Recommended Usage:</h4>
         <ul>
-          <li>Enable CircadianRed mode 2-3 hours before bedtime</li>
-          <li>Start with Medium intensity, adjust based on comfort</li>
-          <li>Use for reading, messaging, light browsing</li>
+          <li>Click the eye icon to activate CircadianRed mode</li>
+          <li>Start with High intensity, click to cycle down if too bright</li>
+          <li>Use 2-3 hours before bedtime for best results</li>
+          <li>For reading, messaging, light browsing</li>
+          <li>Notice the intensity dropdown appears when active</li>
           <li>Limit sessions to 30 minutes to prevent eye strain</li>
-          <li>Compare Light vs. CircadianRed to see the difference</li>
         </ul>
       </div>
 
@@ -807,73 +1098,90 @@ cr.on('enable', (data) => {
     </p>
   </footer>
 
-  <!-- CircadianRed JS -->
-  <script src="../src/circadian-red.js"></script>
-
   <script>
-    // Initialize CircadianRed
-    const cr = new CircadianRed({
-      mode: 'safe',
-      intensity: 'medium',
-      autoEnable: false
-    });
-
     let currentMode = 'light';
+    let circadianState = 'off';
 
     function setMode(mode) {
-      // Update button states
-      document.querySelectorAll('[data-mode]').forEach(btn => {
-        btn.setAttribute('data-active', btn.dataset.mode === mode);
-      });
-
+      document.body.classList.remove('dark-mode');
+      if (mode === 'dark') {
+        document.body.classList.add('dark-mode');
+      }
       currentMode = mode;
 
-      if (mode === 'circadian') {
-        cr.enable('safe');
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      if (mode === 'light') {
+        document.getElementById('lightBtn').classList.add('active');
       } else if (mode === 'dark') {
-        cr.disable();
-        document.body.style.background = '#1a1a1a';
-        document.body.style.color = '#e0e0e0';
-      } else {
-        cr.disable();
-        document.body.style.background = '#ffffff';
-        document.body.style.color = '#1a1a1a';
+        document.getElementById('darkBtn').classList.add('active');
       }
 
       localStorage.setItem('preview-mode', mode);
     }
 
-    function setIntensity(level) {
-      cr.setIntensity(level);
+    function cycleCircadian() {
+      const body = document.body;
+      const circadianBtn = document.getElementById('circadianBtn');
+
+      body.classList.remove('circadian-active', 'circadian-high', 'circadian-medium', 'circadian-low');
+
+      if (circadianState === 'off') {
+        circadianState = 'high';
+        body.classList.add('circadian-active', 'circadian-high');
+        document.getElementById('intensity').value = 'high';
+      } else if (circadianState === 'high') {
+        circadianState = 'medium';
+        body.classList.add('circadian-active', 'circadian-medium');
+        document.getElementById('intensity').value = 'medium';
+      } else if (circadianState === 'medium') {
+        circadianState = 'low';
+        body.classList.add('circadian-active', 'circadian-low');
+        document.getElementById('intensity').value = 'low';
+      } else {
+        circadianState = 'off';
+        circadianBtn.classList.remove('active');
+        localStorage.setItem('circadian-state', 'off');
+        return;
+      }
+
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      circadianBtn.classList.add('active');
+
+      localStorage.setItem('circadian-state', circadianState);
     }
 
-    // Restore saved mode
+    function setIntensity(level) {
+      const body = document.body;
+      body.classList.remove('circadian-high', 'circadian-medium', 'circadian-low');
+      body.classList.add('circadian-active', `circadian-${level}`);
+      circadianState = level;
+
+      localStorage.setItem('circadian-state', level);
+    }
+
+    // Restore saved state
     window.addEventListener('DOMContentLoaded', () => {
-      const saved = localStorage.getItem('preview-mode');
-      if (saved && saved !== 'light') {
-        setMode(saved);
+      const savedMode = localStorage.getItem('preview-mode');
+      if (savedMode) setMode(savedMode);
+
+      const savedCircadian = localStorage.getItem('circadian-state');
+      if (savedCircadian && savedCircadian !== 'off') {
+        const clickMap = { 'high': 1, 'medium': 2, 'low': 3 };
+        const clicks = clickMap[savedCircadian] || 0;
+        for (let i = 0; i < clicks; i++) {
+          cycleCircadian();
+        }
       }
-    });
-
-    // Event tracking
-    cr.on('enable', (data) => {
-      console.log('✅ CircadianRed enabled:', data.mode);
-      console.log('👁️ All blue/green wavelengths eliminated');
-      console.log('📊 Maximum contrast: 5.25:1');
-      console.log('💡 Target intensity: <3 lux');
-    });
-
-    cr.on('disable', () => {
-      console.log('CircadianRed disabled');
-    });
-
-    cr.on('intensityChange', (data) => {
-      console.log('Intensity changed to:', data.level);
     });
 
     // Welcome message
     console.log('%c🌙 CircadianRed Preview Demo', 'font-size: 20px; font-weight: bold; color: #667eea;');
-    console.log('%cClick "CircadianRed" in the header to see pure red-spectrum mode in action!', 'font-size: 14px; color: #666;');
+    console.log('%cClick the eye icon (👁️) to cycle: High → Medium → Low → Off', 'font-size: 14px; color: #666;');
     console.log('%cBased on melanopsin sensitivity research (479nm peak)', 'font-size: 12px; color: #999;');
   </script>
 
